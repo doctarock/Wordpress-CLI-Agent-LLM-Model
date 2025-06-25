@@ -1,5 +1,5 @@
 export const wpSites = {
-  "site1": "C:\\Users\\Derek\\Local Sites\\wordpress-agent\\app\\public"
+  "site1": "C:\\Users\\Username\\Local Sites\\wordpress-agent\\app\\public"
 };
 
 //Step 1: Start the agent worker
