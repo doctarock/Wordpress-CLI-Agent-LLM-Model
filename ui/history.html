@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Agent History</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      background: #f0f0f0;
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+    }
+    #left-panel {
+      flex: 2;
+      padding: 2em;
+      overflow: hidden;
+      border-right: 1px solid #ccc;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+    #right-panel {
+      flex: 1.5;
+      padding: 1em;
+      overflow-y: auto;
+      background: #111;
+      color: #0f0;
+      font-family: monospace;
+    }
+    canvas {
+      margin-bottom: 1em;
+    }
+    h1, h2 {
+      margin-top: 0;
+    }
+    #history-box {
+      flex: 1;
+      overflow-y: auto;
+      background: #f9f9f9;
+      padding: 1em;
+      border: 1px solid #ddd;
+      margin-bottom: 1em;
+    }
+    .entry {
+      margin-bottom: 1em;
+      padding: 0.5em;
+      background: #fff;
+      border-left: 4px solid #007acc;
+    }
+    pre {
+      white-space: pre-wrap;
+      margin: 0.5em 0;
+    }
+    form {
+      margin-top: 1em;
+    }
+    textarea {
+      width: 100%;
+      height: 60px;
+      margin-top: 0.5em;
+      padding: 0.5em;
+    }
+    button {
+      margin-top: 0.5em;
+      padding: 0.5em 1em;
+      background: #007acc;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #005fa3;
+    }
+  </style>
+</head>
+<body>
+  <div id="left-panel">
+    <h1>Agent Task History</h1>
+    <canvas id="chart" width="600" height="200"></canvas>
+    <h2>Recent Tasks</h2>
+    <div id="history-box"><em>Loading...</em></div>
+    <form onsubmit="submitTask(event)">
+    <input type="text" id="userId" placeholder="User ID" required=""><br>
+    <select id="profile">
+      <option value="support">Support</option>
+      <option value="seo">SEO</option>
+      <option value="devops">DevOps</option>
+    </select><br>
+    <textarea id="taskInput" rows="4" placeholder="Enter task..." required=""></textarea><br>
+    <button type="submit">Submit</button>
+    </form>
+  </div>
+  <div id="right-panel">
+    <h2>Live Logs</h2>
+    <pre id="log-text">Loading logs...</pre>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    async function loadHistory() {
+      const res = await fetch('/memory');
+      const db = await res.json();
+      const log = db.task_log || [];
+
+      const chartData = {};
+      log.forEach(t => { chartData[t.tool] = (chartData[t.tool] || 0) + 1; });
+
+      const ctx = document.getElementById('chart').getContext('2d');
+      if (window.taskChart) window.taskChart.destroy();
+      window.taskChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(chartData),
+          datasets: [{ label: 'Tool Usage', data: Object.values(chartData), backgroundColor: '#5a7' }]
+        }
+      });
+
+      const historyBox = document.getElementById('history-box');
+      historyBox.innerHTML = '';
+      log.slice(-10).reverse().forEach(entry => {
+        const div = document.createElement('div');
+        div.className = 'entry';
+        div.innerHTML = `
+          <strong>User:</strong> ${entry.userId || 'unknown'}<br/>
+          <strong>Input:</strong><pre>${entry.input}</pre>
+          <strong>Tool:</strong> ${entry.tool || 'none'}<br/>
+          <strong>Result:</strong><pre>${entry.result}</pre>
+          <em>${new Date(entry.time).toLocaleString()}</em>
+        `;
+        historyBox.appendChild(div);
+      });
+    }
+
+    async function loadLogs() {
+      try {
+        const res = await fetch('/logs/agent.log');
+        const text = await res.text();
+        document.getElementById('log-text').textContent = text.slice(-8000);
+      } catch (e) {
+        document.getElementById('log-text').textContent = 'Unable to load logs.';
+      }
+    }
+
+    async function submitTask(e) {
+      e.preventDefault();
+      const payload = {
+        userId: document.getElementById('userId').value,
+        profile: document.getElementById('profile').value,
+        input: document.getElementById('taskInput').value
+      };
+      const res = await fetch('/submit', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const result = await res.json();
+      console.log(result.message);
+      document.getElementById('taskInput').value = '';
+      loadHistory();
+    }
+
+    loadHistory();
+    loadLogs();
+    setInterval(loadLogs, 5000);
+    setInterval(loadHistory, 10000);
+  </script>
+</body>
+</html>

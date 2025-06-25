@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head><title>Submit Task</title></head>
+<body>
+  <h1>Submit Task</h1>
+  <form id="taskForm">
+    <input type="text" id="userId" placeholder="User ID" required><br>
+    <select id="profile">
+      <option value="support">Support</option>
+      <option value="seo">SEO</option>
+      <option value="devops">DevOps</option>
+    </select><br>
+    <textarea id="taskInput" rows="4" placeholder="Enter task..." required></textarea><br>
+    <button type="submit">Submit</button>
+  </form>
+  <script>
+    document.getElementById('taskForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const payload = {
+        userId: document.getElementById('userId').value,
+        profile: document.getElementById('profile').value,
+        input: document.getElementById('taskInput').value
+      };
+      const res = await fetch('/submit', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const result = await res.json();
+      alert(result.message);
+    });
+  </script>
+</body>
+</html>

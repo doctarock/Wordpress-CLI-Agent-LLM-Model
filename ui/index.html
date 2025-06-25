@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Agent Dashboard</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+      background: #f0f0f0;
+    }
+    #left {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      padding: 1em;
+      border-right: 1px solid #ccc;
+      background: #fff;
+    }
+    #right {
+      flex: 1;
+      padding: 1em;
+      background: #fafafa;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    #chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1em;
+      border: 1px solid #ccc;
+      background: #fefefe;
+      margin-bottom: 1em;
+    }
+    .message {
+      margin-bottom: 1em;
+    }
+    .user { font-weight: bold; color: #336; }
+    .agent { font-weight: bold; color: #060; }
+    #form-area {
+      display: flex;
+      flex-direction: column;
+    }
+    #taskInput, #presetCommands {
+      width: 100%;
+      padding: 0.5em;
+      margin-bottom: 0.5em;
+    }
+    #submitBtn, #clearBtn {
+      padding: 0.5em;
+      margin-bottom: 0.5em;
+    }
+    #history {
+      white-space: pre-wrap;
+      font-family: monospace;
+      font-size: 0.85em;
+      background: #fff;
+      padding: 1em;
+      border: 1px solid #ccc;
+      height: 50%;
+      overflow-y: scroll;
+      margin-bottom: 1em;
+    }
+    #log-text, #cli-log-text, #prompt-text, #response-text {
+      white-space: pre-wrap;
+      font-family: monospace;
+      font-size: 0.85em;
+      background: #fff;
+      padding: 1em;
+      border: 1px solid #ccc;
+      height: 20%;
+      overflow-y: scroll;
+      margin-bottom: 1em;
+    }
+    #recentList {
+      font-size: 0.85em;
+      background: #fff;
+      padding: 1em;
+      border: 1px solid #ccc;
+      height: 40%;
+      overflow-y: scroll;
+    }
+  </style>
+</head>
+<body>
+  <div id="left">
+    <div id="chat"></div>
+    <div id="form-area">
+      <select id="presetCommands">
+        <option value="">-- Select a recent task --</option>
+      </select>
+      <input type="text" id="taskInput" placeholder="Enter task for agent" />
+      <button id="submitBtn">Submit Task</button>
+      <button id="clearBtn">Clear Memory</button>
+    </div>
+  </div>
+  <div id="right">
+    <h2>Live Logs</h2>
+    <pre id="log-text">Loading logs...</pre>
+    <pre id="cli-log-text">Loading logs...</pre>
+    <pre id="prompt-text">Loading logs...</pre>
+    <pre id="response-text">Loading logs...</pre>
+    <h3>Recent Task History</h3>
+    <div id="history"></div>
+  </div>
+
+  <script>
+    async function loadHistory() {
+      const res = await fetch('/memory');
+      const db = await res.json();
+      const chat = document.getElementById('chat');
+      const historyBox = document.getElementById('history');
+      const dropdown = document.getElementById('presetCommands');
+      const log = db.task_log || [];
+      chat.innerHTML = '';
+      dropdown.innerHTML = '<option value="">-- Select a recent task --</option>';
+
+      historyBox.innerText = '';
+
+      //add to drop down
+      log.slice().reverse().forEach(entry => {
+        historyBox.innerText += `${entry.time} | ${entry.tool || 'none'} | ${entry.input}\n`;
+
+        // Only add to dropdown if input is not already present
+        if (![...dropdown.options].some(option => option.value === entry.input)) {
+          dropdown.innerHTML += `<option value="${entry.input}">${entry.input.slice(0, 40)}</option>`;
+        }
+      });
+      
+      loadRecent(db,log);
+    }
+    async function loadRecent(db,log) {
+      log.slice(-10).reverse().forEach(entry => {
+        chat.innerHTML += `
+          <div class="message">
+            <div class="user">🧑‍💻 ${entry.input}</div>
+            <div class="agent">🤖 ${entry.result}</div>
+          </div>
+        `;
+      });
+
+    }
+
+    async function loadLogs() {
+      try {
+        const res = await fetch('/logs/agent.log');
+        const text = await res.text();
+        document.getElementById('log-text').textContent = text.slice(-8000);
+        loadHistory();
+        loadCLILogs();
+        loadResponseLogs();
+        loadPromptLogs();
+      } catch (e) {
+        document.getElementById('log-text').textContent = 'Unable to load logs.';
+      }
+    }
+
+    async function loadResponseLogs() {
+      try {
+        const res = await fetch('/logs/response.log');
+        const text = await res.text();
+        document.getElementById('response-text').textContent = text.slice(-8000);
+      } catch (e) {
+        document.getElementById('response-text').textContent = 'Unable to load logs.';
+      }
+    }
+
+    async function loadPromptLogs() {
+      try {
+        const res = await fetch('/logs/prompt.log');
+        const text = await res.text();
+        document.getElementById('prompt-text').textContent = text.slice(-8000);
+      } catch (e) {
+        document.getElementById('prompt-text').textContent = 'Unable to load logs.';
+      }
+    }
+
+    async function loadCLILogs() {
+      try {
+        const res = await fetch('/logs/wpcli.log');
+        const text = await res.text();
+        document.getElementById('cli-log-text').textContent = text.slice(-8000);
+      } catch (e) {
+        document.getElementById('cli-log-text').textContent = 'Unable to load logs.';
+      }
+    }
+
+    document.getElementById('submitBtn').onclick = async () => {
+      const input = document.getElementById('taskInput').value.trim();
+      if (!input) return;
+      await fetch('/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ input, userId: 'derek' })
+      });
+      document.getElementById('taskInput').value = '';
+      setTimeout(loadHistory, 1000);
+    };
+
+    document.getElementById('clearBtn').onclick = async () => {
+      await fetch('/clear-memory', { method: 'POST' });
+      loadHistory();
+    };
+
+    document.getElementById('presetCommands').onchange = e => {
+      document.getElementById('taskInput').value = e.target.value;
+    };
+    loadLogs();
+    setInterval(loadLogs, 5000);
+  </script>
+</body>
+</html>

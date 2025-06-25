@@ -1,0 +1,3 @@
+```json
+[{"command":"wp plugin deactivate <plugin>", "summary": "Deactivate a plugin."}]
+```

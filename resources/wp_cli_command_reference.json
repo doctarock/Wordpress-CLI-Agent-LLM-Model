@@ -1,0 +1,142 @@
+[
+  {
+    "command": "wp core version",
+    "summary": "Get the current WordPress version."
+  },
+  {
+    "command": "wp core update",
+    "summary": "Update WordPress core to the latest version."
+  },
+  {
+    "command": "wp core install",
+    "summary": "Install WordPress with site details."
+  },
+  {
+    "command": "wp core download",
+    "summary": "Download WordPress files."
+  },
+  {
+    "command": "wp plugin install <plugin>",
+    "summary": "Install a plugin by slug or URL."
+  },
+  {
+    "command": "wp plugin activate <plugin>",
+    "summary": "Activate a plugin."
+  },
+  {
+    "command": "wp plugin deactivate <plugin>",
+    "summary": "Deactivate a plugin."
+  },
+  {
+    "command": "wp plugin delete <plugin>",
+    "summary": "Delete a plugin."
+  },
+  {
+    "command": "wp plugin list",
+    "summary": "List installed plugins with status."
+  },
+  {
+    "command": "wp theme install <theme>",
+    "summary": "Install a theme."
+  },
+  {
+    "command": "wp theme activate <theme>",
+    "summary": "Activate a theme."
+  },
+  {
+    "command": "wp theme delete <theme>",
+    "summary": "Delete a theme."
+  },
+  {
+    "command": "wp theme list",
+    "summary": "List installed themes."
+  },
+  {
+    "command": "wp user create <login> <email>",
+    "summary": "Create a new user."
+  },
+  {
+    "command": "wp user delete <user>",
+    "summary": "Delete a user."
+  },
+  {
+    "command": "wp user list",
+    "summary": "List users with roles and IDs."
+  },
+  {
+    "command": "wp user update <user> --<field>=<value>",
+    "summary": "Update user fields (e.g. role, email, password)."
+  },
+  {
+    "command": "wp post create --post_type=page",
+    "summary": "Create a new page or post."
+  },
+  {
+    "command": "wp post list",
+    "summary": "List posts/pages."
+  },
+  {
+    "command": "wp post delete <id>",
+    "summary": "Delete a post or page by ID."
+  },
+  {
+    "command": "wp post update <id> --post_title=...",
+    "summary": "Update content like title or body."
+  },
+  {
+    "command": "wp option get <option>",
+    "summary": "Get a specific WordPress option value."
+  },
+  {
+    "command": "wp option update <option> <value>",
+    "summary": "Update a WordPress option."
+  },
+  {
+    "command": "wp option list",
+    "summary": "List all site options."
+  },
+  {
+    "command": "wp cache flush",
+    "summary": "Clear all WordPress caches."
+  },
+  {
+    "command": "wp db export",
+    "summary": "Export the database to a file."
+  },
+  {
+    "command": "wp db import <file>",
+    "summary": "Import a database file."
+  },
+  {
+    "command": "wp rewrite flush",
+    "summary": "Flush rewrite rules (permalinks)."
+  },
+  {
+    "command": "wp cron event list",
+    "summary": "View scheduled cron jobs."
+  },
+  {
+    "command": "wp login install",
+    "summary": "Install login command support (via plugin)."
+  },
+  {
+    "command": "wp user session destroy <user>",
+    "summary": "Force logout a user."
+  },
+  {
+    "command": "wp transient delete --all",
+    "summary": "Clear all transient cache entries."
+  },
+  {
+    "command": "wp db check",
+    "summary": "Check database for issues."
+  },
+  {
+    "command": "wp db repair",
+    "summary": "Attempt to repair database tables."
+  },
+  {
+    "command": "wp db optimize",
+    "summary": "Optimize database tables."
+  }
+]

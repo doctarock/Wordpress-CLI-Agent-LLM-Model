@@ -1,0 +1,44 @@
+[2025-06-07T16:32:59.654Z] ✅ Ollama returned: ```json
+[
+  {
+    "command": "wp plugin install woocommerce",
+    "summary": "Install WooCommerce."
+  }
+]
+```
+
+[2025-06-07T16:33:21.257Z] ✅ Ollama returned: ```json
+[{"command": "wp core version", "summary": "Get the current WordPress version."}]
+```
+
+[2025-06-07T16:35:57.351Z] ✅ Ollama returned: [{"command":"wp core version","summary":"Get the current WordPress version."}]
+[2025-06-08T04:01:51.215Z] ✅ Ollama returned: [{"command":"wp plugin install","summary":"Install a plugin by slug or URL."}]
+[2025-06-08T04:04:27.815Z] ✅ Ollama returned: [{"command":"wp core version","summary": "Get the current WordPress version."}]
+[2025-06-08T04:04:36.967Z] ✅ Ollama returned: ```json
+[{
+    "command": "wp plugin install --activate-all",
+    "summary": "Install WooCommerce and activate all necessary plugins."
+}]
+```
+[2025-06-08T04:06:34.350Z] ✅ Ollama returned: ```json
+[{"command":"wp plugin install --version=5.0","summary":"Install a specific version of WooCommerce plugin."}]
+```
+[2025-06-08T04:08:35.123Z] ✅ Ollama returned: ```json
+[{"command":"wp plugin install --activate WooCommerce","summary":"Install and activate the WooCommerce plugin."}]
+```
+[2025-06-08T04:10:51.333Z] ✅ Ollama returned: [{"command":"wp plugin install Jetpack","summary": "Install a plugin by slug or URL."}]
+[2025-06-08T04:14:16.189Z] ✅ Ollama returned: [{"command":"wp core update","summary": "Update WordPress core to the latest version."}]
+[2025-06-08T14:00:41.163Z] ✅ Ollama returned: ```json
+[{"command":"wp core update","summary":"Update WordPress core to the latest version."}]
+```
+[2025-06-08T14:01:41.101Z] ✅ Ollama returned: ```json
+[
+    {
+        "command": "wp core update",
+        "summary": "Update WordPress core to the latest version."
+    }
+]
+```
+[2025-06-08T14:03:23.574Z] ✅ Ollama returned: ```json
+[{"command":"wp plugin deactivate <plugin>", "summary": "Deactivate a plugin."}]
+```

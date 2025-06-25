@@ -1,0 +1,40 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Agent Worker (pm2)",
+      "type": "shell",
+      "command": "pm2 start queue-worker.js --name agent-worker",
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "Restart Agent Worker",
+      "type": "shell",
+      "command": "pm2 restart agent-worker",
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "View Agent Logs",
+      "type": "shell",
+      "command": "pm2 logs agent-worker",
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Run Agent Manually",
+      "type": "shell",
+      "command": "node queue-worker.js",
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Test Ollama Directly",
+      "type": "shell",
+      "command": "ollama run deepseek-coder:6.7b \"Use wp-cli to get the WordPress version.\"",
+      "problemMatcher": [],
+      "group": "test"
+    }
+  ]
+}

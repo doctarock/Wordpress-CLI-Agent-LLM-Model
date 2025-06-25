@@ -1,0 +1,9 @@
+
+[2025-06-08T04:14:16.239Z]
+WP-CLI Command:
+[{"command":"wp core update","summary": "Update WordPress core to the latest version."}]
+
+Result:
+Command failed: cd site1 && wp [{"command":"wp core update","summary": "Update WordPress core to the latest version."}]
+The system cannot find the path specified.
+
