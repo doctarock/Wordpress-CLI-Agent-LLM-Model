@@ -21,18 +21,12 @@ Installation
 
 1.  **Clone the Repository**:
 
-    bash
-
-    CopyEdit
 
     `git clone https://github.com/doctarock/Wordpress-CLI-Agent-LLM-Model.git
     cd Wordpress-CLI-Agent-LLM-Model`
 
 2.  **Install Dependencies**:
 
-    bash
-
-    CopyEdit
 
     `npm install`
 
@@ -47,9 +41,6 @@ Usage
 
 Start the CLI tool with the following command:
 
-bash
-
-CopyEdit
 
 `node main.js`
 
@@ -57,33 +48,21 @@ Once initiated, you can execute various commands to interact with your WordPress
 
 -   **Generate New Post**:
 
-    bash
-
-    CopyEdit
 
     `generate-post "Your prompt here"`
 
 -   **Edit Existing Post**:
 
-    bash
-
-    CopyEdit
 
     `edit-post <post-id> "Your edit instructions here"`
 
 -   **View Post History**:
 
-    bash
-
-    CopyEdit
 
     `view-history <post-id>`
 
 -   **Manage Users**:
 
-    bash
-
-    CopyEdit
 
     `list-users
     add-user <username> <role>`
@@ -122,25 +101,19 @@ Contributions are welcome! Please follow these steps:
 
 2.  Create a new branch:
 
-    bash
 
-    CopyEdit
 
     `git checkout -b feature/your-feature-name`
 
 3.  Commit your changes:
 
-    bash
 
-    CopyEdit
 
     `git commit -m "Add your message here"`
 
 4.  Push to the branch:
 
-    bash
 
-    CopyEdit
 
     `git push origin feature/your-feature-name`
 
